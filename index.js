@@ -13,12 +13,23 @@ class REPL {
     this.lastRanCommandOutput = undefined;
   }
 
+  _buildBuiltInLibs () {
+    const output = {};
+    const { _builtinLibs } = require('repl');
+
+    for (const lib in _builtinLibs) {
+      output[_builtinLibs[lib]] = require(_builtinLibs[lib]);
+    }
+
+    return output;
+  }
+
   _buildContext (config = this.config, ctx = this.sourceCtx) {
     if (config.includeNative) {
       ctx = {
         require,
         Buffer,
-        __dirname: require.main.filename.split(sep).slice(0, -1),
+        __dirname: require('require-main-filename')().split(sep).slice(0, -1),
         setTimeout,
         setInterval,
         setImmediate,
@@ -36,17 +47,6 @@ class REPL {
 
     createContext(ctx);
     return ctx;
-  }
-
-  _buildBuiltinLibs () {
-    const output = {};
-    const { _builtinLibs } = require('repl');
-
-    for (const lib in _builtinLibs) {
-      output[_builtinLibs[lib]] = require(_builtinLibs[lib]);
-    }
-
-    return output;
   }
 
   _getIndentation (isClosing = false) {

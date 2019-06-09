@@ -9,7 +9,7 @@ const ProgrammaticREPL = require(`${__dirname}/index.js`);
 const getREPL = (cfg, ctx = {}) => new ProgrammaticREPL({
   includeNative: true,
   includeBuiltinLibs: true,
-  indentation: 2
+  indentation: 2,
   ...cfg
 }, ctx);
 
